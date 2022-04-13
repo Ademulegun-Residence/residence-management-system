@@ -1,11 +1,8 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+import { getAllhouses } from "../controllers";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.send({
-    message: "Hello World",
-  });
-});
+router.get("/", getAllhouses);
 
 export { router as houseRouter };
