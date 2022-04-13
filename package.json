@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn server.ts"
+    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn index.ts",
+    "start": "ts-node index.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
