@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn index.ts",
-    "start": "ts-node index.ts"
+    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/index.ts",
+    "start": "node build/src/index.js",
+    "build": "tsc -p ./ || true"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -38,6 +39,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.17.3",
     "express-async-errors": "^3.1.1",
+    "joi": "^17.6.0",
     "morgan": "^1.10.0",
     "ts-node": "^10.7.0"
   }
