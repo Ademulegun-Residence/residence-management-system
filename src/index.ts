@@ -15,6 +15,10 @@ app.use(logger("dev"));
 // register routes
 router(app);
 
+app.get("/", (req, res) => {
+  res.send("This is ASRA management system!");
+});
+
 app.all("*", () => {
   throw new NotFoundError();
 });
