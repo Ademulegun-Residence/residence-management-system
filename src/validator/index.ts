@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { StreetName, UnitType } from "../types";
 import { Status } from "@prisma/client";
-import { UnprocessableRequest } from "@tunedev_tickets/common";
+import prisma from "../db";
+import { NotFoundError, UnprocessableRequest } from "@tunedev_tickets/common";
 import Joi from "joi";
 
 const createNewHouseSchema = Joi.object({
@@ -80,3 +81,42 @@ export const validateFindOrCreateResident = validatorFactory(
   findOrCreateResidentSchema
 );
 export const validateUpdateResident = validatorFactory(updateResidentSchema);
+
+export const shoutIfHouseIdDoesNotExist = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { houseId: houseIdFromParam } = req.params;
+  const { houseId: houseIdFromBody } = req.body;
+  const houseId = houseIdFromParam || houseIdFromBody;
+
+  const house = await prisma.house.findUnique({
+    where: {
+      id: houseId,
+    },
+  });
+  if (!house) {
+    throw new NotFoundError(`House with id ${houseId} does not exist`);
+  }
+  next();
+};
+export const shoutIfResidentIdDoesNotExist = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { residentId: residentIdFromParam } = req.params;
+  const { residentId: residentIdFromBody } = req.body;
+  const residentId = residentIdFromParam || residentIdFromBody;
+
+  const resident = await prisma.resident.findUnique({
+    where: {
+      id: residentId,
+    },
+  });
+  if (!resident) {
+    throw new NotFoundError(`Resdient with id ${residentId} does not exist`);
+  }
+  next();
+};
