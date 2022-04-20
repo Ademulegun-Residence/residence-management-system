@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import moment from "moment";
 import { StreetName } from "../types";
 import prisma from "../db";
 
@@ -77,7 +78,8 @@ export const findOrCreateNewResident = async (req: Request, res: Response) => {
 
 export const updateResidentInfo = async (req: Request, res: Response) => {
   const { residentId } = req.params;
-  const { houseId, name, unitType, residentialStatus } = req.body;
+  const { houseId, name, unitType, residentialStatus, gender, dateOfBirth } =
+    req.body;
   const resident = await prisma.resident.update({
     where: { id: residentId },
     data: {
@@ -85,10 +87,39 @@ export const updateResidentInfo = async (req: Request, res: Response) => {
       name,
       unitType,
       residentialStatus,
+      gender,
+      dateOfBirth: moment(dateOfBirth, "YYYY-MM-DD")
+        .startOf("day")
+        .toISOString(),
     },
   });
   res.status(201).json({
-    message: "Resident Info Updated",
+    message: "Resident Info Updated successfully",
     data: resident,
+  });
+};
+
+export const createDependant = async (req: Request, res: Response) => {
+  const { residentId } = req.params;
+  const { name, dateOfBirth, email, phoneNumber, gender } = req.body;
+
+  const dependant = await prisma.dependant.create({
+    data: {
+      residentId,
+      name,
+      gender,
+      dateOfBirth: moment(dateOfBirth, "YYYY-MM-DD")
+        .startOf("day")
+        .toISOString(),
+      email,
+      phoneNumber,
+    },
+    include: {
+      resident: true,
+    },
+  });
+  res.status(201).json({
+    message: "Dependant Created successfully",
+    data: dependant,
   });
 };
