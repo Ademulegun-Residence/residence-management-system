@@ -25,6 +25,13 @@ export const getAllhouses = async (req: Request, res: Response) => {
   });
 };
 
+export const getAlStreetNames = (req: Request, res: Response) => {
+  return res.status(200).json({
+    message: "All Street Names",
+    data: Object.keys(StreetName),
+  });
+};
+
 export const createNewHouse = async (req: Request, res: Response) => {
   const { streetName, houseNo } = req.body;
   const newHouse = await prisma.house.create({
