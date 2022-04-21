@@ -1,4 +1,5 @@
 import express, { json, urlencoded } from "express";
+import cors from "cors";
 import "express-async-errors";
 import logger from "morgan";
 import { NotFoundError, errorHandler } from "@tunedev_tickets/common";
@@ -9,6 +10,7 @@ import router from "./Routes";
 const app = express();
 
 app.use(json());
+app.use(cors());
 app.use(urlencoded({ extended: true }));
 app.use(logger("dev"));
 
