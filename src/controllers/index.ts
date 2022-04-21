@@ -53,6 +53,9 @@ export const findOrCreateNewResident = async (req: Request, res: Response) => {
     where: {
       OR: [{ email }, { phoneNumber }],
     },
+    include: {
+      house: true,
+    },
   });
   let [resident, ...duplicateResident] = residents;
   if (duplicateResident.length > 0) {
@@ -66,6 +69,9 @@ export const findOrCreateNewResident = async (req: Request, res: Response) => {
       data: {
         email,
         phoneNumber,
+      },
+      include: {
+        house: true,
       },
     });
   }
