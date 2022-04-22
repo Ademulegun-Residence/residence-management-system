@@ -48,7 +48,9 @@ export const createNewHouse = async (req: Request, res: Response) => {
 };
 
 export const findOrCreateNewResident = async (req: Request, res: Response) => {
-  const { email, phoneNumber } = req.body;
+  let { email, phoneNumber } = req.body;
+  email = email.trim().toLowerCase();
+  phoneNumber = phoneNumber.trim();
   const residents = await prisma.resident.findMany({
     where: {
       OR: [{ email }, { phoneNumber }],
@@ -107,7 +109,10 @@ export const updateResidentInfo = async (req: Request, res: Response) => {
 
 export const createDependant = async (req: Request, res: Response) => {
   const { residentId } = req.params;
-  const { name, dateOfBirth, email, phoneNumber, gender } = req.body;
+  let { name, dateOfBirth, email, phoneNumber, gender } = req.body;
+  name = name.trim().toLowerCase();
+  email = email.trim().toLowerCase();
+  phoneNumber = phoneNumber.trim();
 
   const dependant = await prisma.dependant.create({
     data: {
